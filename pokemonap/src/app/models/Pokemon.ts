@@ -2,7 +2,7 @@ import { environment } from 'src/environments/environment';
 import { IPokemon } from '../interface/pokemon.interface';
 
 export class Pokemon {
-  name: string;
+  name!: string;
   img: string;
   id: number;
 
