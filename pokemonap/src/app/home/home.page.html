@@ -5,10 +5,12 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-list>
-    <ion-item *ngFor = 'let pok of pokemons'>
+  <ion-list *ngIf=" pokemons$ | async as pokemons">
+    <ion-item [queryParams]="{name: pok.name}" [routerLink]="['pokemon-details', pok.id]" *ngFor = 'let pok of pokemons' detail lines="none">
+      <ion-thumbnail slot="start">
       <img  src="{{pok.img}}">
-      <ion-label>{{pok.name}}</ion-label>
+    </ion-thumbnail>
+      <ion-label slot="end">{{pok.name}}</ion-label>
     </ion-item>
   </ion-list>
   <ion-header collapse="condense">

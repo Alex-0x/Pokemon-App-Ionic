@@ -6,8 +6,15 @@ import { HomePage } from './home.page';
 const routes: Routes = [
   {
     path: '',
-    component: HomePage
-  }
+    component: HomePage,
+  },
+  {
+    path: 'pokemon-details/:id',
+    loadChildren: () =>
+      import('../pokemon-details/pokemon-details.module').then(
+        (m) => m.PokemonDetailsPageModule
+      ),
+  },
 ];
 
 @NgModule({
