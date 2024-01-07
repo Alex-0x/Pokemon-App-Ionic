@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { IPokemonData } from '../interface/pokemon.interface';
 import { Observable } from 'rxjs';
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -15,11 +16,15 @@ export class PokemonDetailsPage implements OnInit {
   public pokemon!: Pokemon;
   public pokemonData$!: Observable<IPokemonData>;
   constructor(
+    private loadingCtrl: LoadingController,
     private router: ActivatedRoute,
     private pokService: PokemonApiService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait...',
+    });
     const idString = this.router.snapshot.paramMap.get('id');
     if (idString) {
       const id = +idString;
@@ -29,8 +34,9 @@ export class PokemonDetailsPage implements OnInit {
         name: name ?? '',
         url: environment.pokImgUrl + '/' + id + '/',
       });
-
+      await loading.present();
       this.pokemonData$ = this.pokService.getPokemonData(id);
+      this.pokemonData$.subscribe(() => loading.dismiss());
     } else {
       console.error("L'ID non è presente nella route.");
     }
