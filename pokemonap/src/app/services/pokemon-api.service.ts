@@ -22,7 +22,7 @@ export class PokemonApiService {
     this.storage.create();
   }
 
-  getPokemons(): Observable<Pokemon[]> {
+  getPokemons(pokemonName: string): Observable<Pokemon[]> {
     const url = environment.pokeUrl + '?limit=' + environment.limit;
     const cacheData = from(this.storage.get(POKEMON_KEY));
     cacheData.subscribe((res) => {
@@ -37,6 +37,12 @@ export class PokemonApiService {
         }
         // Se abbiamo una risposta, mettiamo i dati nella cache
         this.storage.set(POKEMON_KEY, res);
+        if (pokemonName.length > 0) {
+          res.results = res.results.filter((p) =>
+            //filtro per la prima parola
+            p.name.startsWith(pokemonName)
+          );
+        }
         return res.results.map((pokemonData) => new Pokemon(pokemonData));
       }),
       tap((res: Pokemon[]) => console.log(res))

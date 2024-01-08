@@ -21,7 +21,7 @@ export class HomePage implements OnInit {
   async ngOnInit() {
     this.loading = this.presentLoading();
     (await this.loading).present();
-    this.pokemons$ = this.pokService.getPokemons();
+    this.pokemons$ = this.pokService.getPokemons('');
     this.pokemons$.subscribe(async () => {
       (await this.loading).dismiss();
     });
@@ -33,5 +33,11 @@ export class HomePage implements OnInit {
     });
 
     return loading;
+  }
+  filterPokemon($event: any) {
+    this.pokemons$ = this.pokService.getPokemons($event.target.value);
+  }
+  clearFilter($event: any) {
+    console.log($event);
   }
 }

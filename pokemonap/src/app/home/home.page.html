@@ -1,6 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>home</ion-title>
+    <ion-searchbar
+    (ionChange)="filterPokemon($event)"
+    (ionClear)="clearFilter($event)"
+    showCancelButton="focus"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 

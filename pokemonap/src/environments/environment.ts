@@ -10,6 +10,9 @@ export const environment = {
   limit: 100,
 };
 
+//img official
+// https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
