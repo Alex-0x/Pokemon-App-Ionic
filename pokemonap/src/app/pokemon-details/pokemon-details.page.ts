@@ -16,17 +16,19 @@ export class PokemonDetailsPage implements OnInit {
   public pokemon!: Pokemon;
   public pokemonData$!: Observable<IPokemonData>;
   private id!: number;
+  isFavorite: boolean = false;
   constructor(
     private loadingCtrl: LoadingController,
     private router: ActivatedRoute,
     private pokService: PokemonApiService,
     private route: Router
   ) {}
-
-  async ngOnInit() {
+  async ngOnInit() {}
+  async ionViewWillEnter() {
     const loading = await this.loadingCtrl.create({
       message: 'Please wait...',
     });
+
     const idString = this.router.snapshot.paramMap.get('id');
     if (idString) {
       const id = +idString;
@@ -39,13 +41,18 @@ export class PokemonDetailsPage implements OnInit {
       await loading.present();
       this.id = id;
       this.pokemonData$ = this.pokService.getPokemonData(id);
+      this.isFavorite = await this.pokService.isPokemonFavorite(this.pokemon);
       this.pokemonData$.subscribe(() => loading.dismiss());
     } else {
       console.error("L'ID non è presente nella route.");
     }
   }
+
   async addToFavorite() {
-    const result = await this.pokService.addPokemonToFavorite(this.pokemon);
+    const result = await this.pokService.addPokemonToFavorite(
+      this.pokemon,
+      this.isFavorite
+    );
     alert(result);
     this.route.navigate(['/pokemons/favorites']);
   }

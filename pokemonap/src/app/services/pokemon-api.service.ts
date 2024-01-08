@@ -47,17 +47,32 @@ export class PokemonApiService {
     const url = environment.pokeUrl + '/' + id + '/';
     return this.http.get<IPokemonData>(url);
   }
-  async addPokemonToFavorite(pok: Pokemon) {
+  async addPokemonToFavorite(pok: Pokemon, isFavorite: boolean) {
     //prima cosa controlliamo se già ci sono pokemon tra i preferiti sennò torniamo un array vuoto
     let data: Pokemon[] = (await this.storage.get(POKEMON_FAVORITE)) ?? [];
-    alert(data.length);
-    if (data.includes(pok)) {
+    if (!isFavorite && data.some((res) => +res.id == +pok.id)) {
       return;
     }
-    data.push(pok);
+    if (!isFavorite) {
+      data.push(pok);
+    } else {
+      //filtro tutti i pokemon che c'erano tranne quello che sta passando
+      data = data.filter((res) => res.id !== pok.id);
+    }
+
     return await this.storage.set(POKEMON_FAVORITE, data);
   }
   async getFavoritePokemons() {
     return from(this.storage.get(POKEMON_FAVORITE));
+  }
+  async isPokemonFavorite(pok: Pokemon) {
+    let data: Pokemon[] = (await this.storage.get(POKEMON_FAVORITE)) ?? [];
+    if (data.length === 0) {
+      return false;
+    }
+    if (data.some((res) => +res.id == +pok.id)) {
+      return true;
+    }
+    return false;
   }
 }
