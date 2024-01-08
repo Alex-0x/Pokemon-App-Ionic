@@ -12,6 +12,7 @@ import { Pokemon } from '../models/Pokemon';
 import { Storage } from '@ionic/storage-angular';
 
 const POKEMON_KEY = 'pokemons';
+const POKEMON_FAVORITE = 'pokemons-favorite';
 
 @Injectable({
   providedIn: 'root',
@@ -45,5 +46,18 @@ export class PokemonApiService {
   getPokemonData(id: number): Observable<IPokemonData> {
     const url = environment.pokeUrl + '/' + id + '/';
     return this.http.get<IPokemonData>(url);
+  }
+  async addPokemonToFavorite(pok: Pokemon) {
+    //prima cosa controlliamo se già ci sono pokemon tra i preferiti sennò torniamo un array vuoto
+    let data: Pokemon[] = (await this.storage.get(POKEMON_FAVORITE)) ?? [];
+    alert(data.length);
+    if (data.includes(pok)) {
+      return;
+    }
+    data.push(pok);
+    return await this.storage.set(POKEMON_FAVORITE, data);
+  }
+  async getFavoritePokemons() {
+    return from(this.storage.get(POKEMON_FAVORITE));
   }
 }

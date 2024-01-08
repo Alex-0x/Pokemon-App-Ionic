@@ -1,7 +1,7 @@
 import { PokemonApiService } from './../services/pokemon-api.service';
 import { Pokemon } from './../models/Pokemon';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { IPokemonData } from '../interface/pokemon.interface';
 import { Observable } from 'rxjs';
@@ -19,7 +19,8 @@ export class PokemonDetailsPage implements OnInit {
   constructor(
     private loadingCtrl: LoadingController,
     private router: ActivatedRoute,
-    private pokService: PokemonApiService
+    private pokService: PokemonApiService,
+    private route: Router
   ) {}
 
   async ngOnInit() {
@@ -43,6 +44,10 @@ export class PokemonDetailsPage implements OnInit {
       console.error("L'ID non è presente nella route.");
     }
   }
-  addToFavorite() {}
+  async addToFavorite() {
+    const result = await this.pokService.addPokemonToFavorite(this.pokemon);
+    alert(result);
+    this.route.navigate(['/pokemons/favorites']);
+  }
   share() {}
 }
