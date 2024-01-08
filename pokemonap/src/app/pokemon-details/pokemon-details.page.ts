@@ -15,6 +15,7 @@ import { LoadingController } from '@ionic/angular';
 export class PokemonDetailsPage implements OnInit {
   public pokemon!: Pokemon;
   public pokemonData$!: Observable<IPokemonData>;
+  private id!: number;
   constructor(
     private loadingCtrl: LoadingController,
     private router: ActivatedRoute,
@@ -35,10 +36,13 @@ export class PokemonDetailsPage implements OnInit {
         url: environment.pokImgUrl + '/' + id + '/',
       });
       await loading.present();
+      this.id = id;
       this.pokemonData$ = this.pokService.getPokemonData(id);
       this.pokemonData$.subscribe(() => loading.dismiss());
     } else {
       console.error("L'ID non è presente nella route.");
     }
   }
+  addToFavorite() {}
+  share() {}
 }
