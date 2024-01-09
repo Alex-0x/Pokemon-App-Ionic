@@ -47,8 +47,22 @@ export class HomePage implements OnInit {
     return poks.length > 0;
   }
 
-  async favorite(pok: Pokemon) {
-    await this.pokService.addPokemonToFavorite(pok, this.isPokFavorite(pok));
+  async favorite(pok: Pokemon, event: any) {
+    const isFav = this.isPokFavorite(pok);
+    const result = await this.pokService.addPokemonToFavorite(pok, isFav);
+    this.favorites = await this.pokService.getFavoritePokemon('').toPromise();
+    let item;
+    if (event.target.nodeName.toUpperCase() === 'ION-ICON') {
+      item = event.target.parentNode;
+    } else {
+      item = event.target;
+    }
+
+    if (!isFav && result) {
+      item.color = 'danger';
+    } else {
+      item.color = 'primary';
+    }
     await this.pokList.closeSlidingItems();
   }
 

@@ -1,8 +1,7 @@
 <ion-header>
   <ion-toolbar class="ion-padding">
-    <ion-title >{{pageTitle | uppercase}}</ion-title>
+    <ion-title>{{pageTitle | uppercase}}</ion-title>
     <ion-searchbar
-
       (ionChange)="filterPokemons($event)"
 
       showCancelButton="focus">
@@ -13,14 +12,15 @@
 
 <ion-content>
 
-  <ion-list button *ngIf="pokemons$ | async as pokemons" #ionList>
+  <ion-list *ngIf="pokemons$ | async as pokemons" button>
 
     <ion-item-sliding *ngFor="let pok of pokemons">
       <ion-item-options side="end">
-        <ion-item-option  (click)="favorite(pok)" color="primary"  color="{{(isFavoritePage || isPokFavorite(pok))? 'danger':'primary'}}">
+        <ion-item-option (click)="favorite(pok, $event)"
+                         color="{{(isFavoritePage || isPokFavorite(pok))? 'danger':'primary'}}">
           <ion-icon name="heart" slot="icon-only"></ion-icon>
         </ion-item-option>
-        <ion-item-option (click)="share(pok)" color="danger">
+        <ion-item-option (click)="share(pok)" color="primary">
           <ion-icon name="share" slot="icon-only"></ion-icon>
         </ion-item-option>
       </ion-item-options>
