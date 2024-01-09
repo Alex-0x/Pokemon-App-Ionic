@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PokemonApiService } from '../services/pokemon-api.service';
 import { Pokemon } from '../models/Pokemon';
 import { Observable } from 'rxjs';
-import { IonList, LoadingController } from '@ionic/angular';
+import { IonList, LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +19,8 @@ export class HomePage implements OnInit {
 
   constructor(
     public pokService: PokemonApiService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private toast: ToastController
   ) {}
 
   async ngOnInit() {
@@ -47,6 +48,17 @@ export class HomePage implements OnInit {
     return poks.length > 0;
   }
 
+  async presentToast(msg: string, color: string) {
+    const toast = await this.toast.create({
+      message: msg,
+      duration: 2000,
+      position: 'middle',
+      animated: true,
+      color,
+    });
+    return await toast.present();
+  }
+
   async favorite(pok: Pokemon, event: any) {
     const isFav = this.isPokFavorite(pok);
     const result = await this.pokService.addPokemonToFavorite(pok, isFav);
@@ -59,9 +71,11 @@ export class HomePage implements OnInit {
     }
 
     if (!isFav && result) {
+      await this.presentToast(pok.name + ' added to favorite!', 'danger');
       item.color = 'danger';
     } else {
       item.color = 'primary';
+      await this.presentToast(pok.name + ' removed to favorite!', 'primary');
     }
     await this.pokList.closeSlidingItems();
   }
