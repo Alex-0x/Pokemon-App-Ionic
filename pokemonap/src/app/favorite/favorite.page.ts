@@ -36,7 +36,7 @@ export class FavoritePage implements OnInit {
   clearFilter($event: any) {
     console.log('event', $event);
   }
-  async favorite(pok: Pokemon) {
+  async favorite(pok: Pokemon, element: any) {
     await this.pokService.addPokemonToFavorite(pok, true);
     this.populateFavorite();
     this.pokemons$.subscribe((res) => {

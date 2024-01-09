@@ -22,6 +22,14 @@ const routes: Routes = [
     loadChildren: () =>
       import('./contact/contact.module').then((m) => m.ContactPageModule),
   },
+  {
+    path: 'menu',
+    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
+  },
+  {
+    path: 'menu-toolbar',
+    loadChildren: () => import('./pages/menu-toolbar/menu-toolbar.module').then( m => m.MenuToolbarPageModule)
+  },
 ];
 @NgModule({
   imports: [

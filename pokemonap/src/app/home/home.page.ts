@@ -2,7 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PokemonApiService } from '../services/pokemon-api.service';
 import { Pokemon } from '../models/Pokemon';
 import { Observable } from 'rxjs';
-import { IonList, LoadingController } from '@ionic/angular';
+import {
+  IonList,
+  LoadingController,
+  MenuController,
+  ToastController,
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -19,8 +24,14 @@ export class HomePage implements OnInit {
 
   constructor(
     public pokService: PokemonApiService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private toast: ToastController,
+    private menuCtrl: MenuController
   ) {}
+
+  async openMenu() {
+    await this.menuCtrl.open('mainMenu');
+  }
 
   async ngOnInit() {
     this.loading = await this.presentLoading();
@@ -47,8 +58,35 @@ export class HomePage implements OnInit {
     return poks.length > 0;
   }
 
-  async favorite(pok: Pokemon) {
-    await this.pokService.addPokemonToFavorite(pok, this.isPokFavorite(pok));
+  async presentToast(msg: string, color: string) {
+    const toast = await this.toast.create({
+      message: msg,
+      duration: 2000,
+      position: 'middle',
+      animated: true,
+      color,
+    });
+    return await toast.present();
+  }
+
+  async favorite(pok: Pokemon, event: any) {
+    const isFav = this.isPokFavorite(pok);
+    const result = await this.pokService.addPokemonToFavorite(pok, isFav);
+    this.favorites = await this.pokService.getFavoritePokemon('').toPromise();
+    let item;
+    if (event.target.nodeName.toUpperCase() === 'ION-ICON') {
+      item = event.target.parentNode;
+    } else {
+      item = event.target;
+    }
+
+    if (!isFav && result) {
+      await this.presentToast(pok.name + ' added to favorite!', 'danger');
+      item.color = 'danger';
+    } else {
+      item.color = 'primary';
+      await this.presentToast(pok.name + ' removed to favorite!', 'primary');
+    }
     await this.pokList.closeSlidingItems();
   }
 
