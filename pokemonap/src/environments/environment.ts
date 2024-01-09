@@ -6,9 +6,13 @@ export const environment = {
   production: false,
   pokeUrl: 'https://pokeapi.co/api/v2/pokemon',
   pokImgUrl:
-    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/',
+    'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/',
   limit: 100,
 };
+
+//img noOffical => https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/
+//img official
+// https://github.com/PokeAPI/sprites/blob/master/sprites/pokemon/other/official-artwork/
 
 /*
  * For easier debugging in development mode, you can import the following file
