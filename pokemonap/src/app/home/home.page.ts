@@ -2,7 +2,12 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { PokemonApiService } from '../services/pokemon-api.service';
 import { Pokemon } from '../models/Pokemon';
 import { Observable } from 'rxjs';
-import { IonList, LoadingController, ToastController } from '@ionic/angular';
+import {
+  IonList,
+  LoadingController,
+  MenuController,
+  ToastController,
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -20,8 +25,13 @@ export class HomePage implements OnInit {
   constructor(
     public pokService: PokemonApiService,
     private loadingCtrl: LoadingController,
-    private toast: ToastController
+    private toast: ToastController,
+    private menuCtrl: MenuController
   ) {}
+
+  async openMenu() {
+    await this.menuCtrl.open('mainMenu');
+  }
 
   async ngOnInit() {
     this.loading = await this.presentLoading();
